@@ -1,5 +1,9 @@
 package com.wo.agregadordeinvestimentos.controller;
 
+import com.wo.agregadordeinvestimentos.controller.dto.AccountResponseDto;
+import com.wo.agregadordeinvestimentos.controller.dto.CreateAccountDto;
+import com.wo.agregadordeinvestimentos.controller.dto.CreateUserDto;
+import com.wo.agregadordeinvestimentos.controller.dto.UpdateUserDto;
 import com.wo.agregadordeinvestimentos.entity.User;
 import com.wo.agregadordeinvestimentos.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -46,5 +50,21 @@ public class UserController {
                                            @RequestBody UpdateUserDto updateUserDto) {
         userService.updateUserById(userId, updateUserDto);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{userId}/accounts")
+    public ResponseEntity<Void> createAccount(@PathVariable("userId") String userId,
+                                           @RequestBody CreateAccountDto createAccountDto) {
+        userService.createAccount(userId, createAccountDto);
+
+        return ResponseEntity.created(URI.create("/v1/users/")).build();
+    }
+
+    @GetMapping("/{userId}/accounts")
+    public ResponseEntity<List<AccountResponseDto>> listAccounts(@PathVariable("userId") String userId) {
+
+       var accounts = userService.listAccounts(userId);
+
+        return ResponseEntity.ok(accounts);
     }
 }
