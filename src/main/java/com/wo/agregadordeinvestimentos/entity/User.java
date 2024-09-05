@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -28,11 +29,24 @@ public class User implements Serializable {
     private String email;
     private String password;
 
+    @OneToMany(mappedBy = "user")
+    private List<Account> accounts;
+
     @CreationTimestamp
     private Instant creationTimestamp;
 
     @UpdateTimestamp
     private Instant updatedTimestamp;
+
+    public User(UUID userId, String username, String email, String password,
+                Instant creationTimestamp, Instant updatedTimestamp) {
+        this.userId = userId;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.creationTimestamp = creationTimestamp;
+        this.updatedTimestamp = updatedTimestamp;
+    }
 
     @Override
     public boolean equals(Object o) {
