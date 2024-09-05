@@ -1,9 +1,6 @@
 package com.wo.agregadordeinvestimentos.controller;
 
-import com.wo.agregadordeinvestimentos.controller.dto.AccountResponseDto;
-import com.wo.agregadordeinvestimentos.controller.dto.CreateAccountDto;
-import com.wo.agregadordeinvestimentos.controller.dto.CreateUserDto;
-import com.wo.agregadordeinvestimentos.controller.dto.UpdateUserDto;
+import com.wo.agregadordeinvestimentos.controller.dto.*;
 import com.wo.agregadordeinvestimentos.entity.User;
 import com.wo.agregadordeinvestimentos.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +24,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<User> getUser(@PathVariable("userId") String userId) {
+    public ResponseEntity<UserResponseIdDto> getUser(@PathVariable("userId") String userId) {
         var user = userService.getUserById(userId);
 
         return user.map(ResponseEntity::ok)
@@ -35,8 +32,9 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        return ResponseEntity.ok(userService.listAllUsers());
+    public ResponseEntity<List<UserResponseDto>> getAllUsers() {
+        var users = userService.listAllUsers();
+        return ResponseEntity.ok(users);
     }
 
     @DeleteMapping("/{userId}")

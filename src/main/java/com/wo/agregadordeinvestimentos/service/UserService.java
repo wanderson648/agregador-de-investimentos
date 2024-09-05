@@ -1,9 +1,6 @@
 package com.wo.agregadordeinvestimentos.service;
 
-import com.wo.agregadordeinvestimentos.controller.dto.AccountResponseDto;
-import com.wo.agregadordeinvestimentos.controller.dto.CreateAccountDto;
-import com.wo.agregadordeinvestimentos.controller.dto.CreateUserDto;
-import com.wo.agregadordeinvestimentos.controller.dto.UpdateUserDto;
+import com.wo.agregadordeinvestimentos.controller.dto.*;
 import com.wo.agregadordeinvestimentos.entity.Account;
 import com.wo.agregadordeinvestimentos.entity.BillingAddress;
 import com.wo.agregadordeinvestimentos.entity.User;
@@ -42,12 +39,24 @@ public class UserService {
         return userSaved.getUserId();
     }
 
-    public Optional<User> getUserById(String userId) {
-        return userRepository.findById(UUID.fromString(userId));
+
+    public Optional<UserResponseIdDto> getUserById(String userId) {
+        var user = userRepository.findById(UUID.fromString(userId));
+
+        return user.map(u -> new UserResponseIdDto(
+                user.get().getUserId(),
+                user.get().getUsername(),
+                user.get().getEmail()));
     }
 
-    public List<User> listAllUsers() {
-        return userRepository.findAll();
+    public List<UserResponseDto> listAllUsers() {
+
+        return userRepository.findAll().stream()
+                .map(user -> new UserResponseDto(
+                        user.getUserId(),
+                        user.getUsername(),
+                        user.getEmail()
+                )).toList();
     }
 
 
